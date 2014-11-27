@@ -20,8 +20,7 @@ public class Game {
 	}
 
 	public void play(int times) throws IncorrectNumberOfPlayersException, OrderOfPlayersIsChangedException {
-		if (partecipants.size() < 2 || partecipants.size() > 8)
-			throw new IncorrectNumberOfPlayersException("Numero di Giocatori non corretto. Cosi non si Gioca");
+		if (partecipants.size() < 2 || partecipants.size() > 8) throw new IncorrectNumberOfPlayersException("Numero di Giocatori non corretto. Cosi non si Gioca");
 		for (int i = 0; i < times; i++) {
 			round();
 		}

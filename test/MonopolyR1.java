@@ -5,18 +5,27 @@ import java.util.Arrays;
 
 import javax.net.ssl.HostnameVerifier;
 
+import org.junit.Before;
 import org.junit.Test;
 
 
 public class MonopolyR1 {
 
+	private Dice dice;
+	private Game game;
+	private Board board;
 	
+	@Before
+	public void init(){
+		dice = new Dice();
+		game = new Game();
+		board = new Board();
+
+	}
 	
 	@Test
 	public void rollSevenFromPositionZero(){
-		
 		PlaceHolder placeHolder = new PlaceHolder(new Board());
-		Dice dice = new Dice();
 		dice.result(7);
 		Player player = new Player(placeHolder);
 		player.dice(dice);
@@ -27,7 +36,6 @@ public class MonopolyR1 {
 	@Test
 	public void rollSixFromPositionThirtyNine(){
 		PlaceHolder placeHolder = new PlaceHolder(new Board());
-		Dice dice = new Dice();
 		dice.result(6);
 		Player player = new Player(placeHolder);
 		player.dice(dice);
@@ -38,8 +46,6 @@ public class MonopolyR1 {
 	
 	@Test
 	public void HorseAndCarPlayAGame(){
-		Game game = new Game();
-		Board board = new Board();
 		PlaceHolder horsePlaceHolder = new PlaceHolder(board);
 		Player horse = new Player(horsePlaceHolder);
 		game.partecipant(horse);
@@ -52,8 +58,6 @@ public class MonopolyR1 {
 	
 	@Test(expected=IncorrectNumberOfPlayersException.class)
 	public void isImpossibleToPlayaGameWithOnePlayer() throws IncorrectNumberOfPlayersException, OrderOfPlayersIsChangedException{
-		Game game = new Game();
-		Board board = new Board();
 		PlaceHolder horsePlaceHolder = new PlaceHolder(board);
 		Player horse = new Player(horsePlaceHolder);
 		game.partecipant(horse);
@@ -62,23 +66,14 @@ public class MonopolyR1 {
 	
 	@Test(expected=IncorrectNumberOfPlayersException.class)
 	public void isImpossibleToPlayaGameWithNinePlayer() throws IncorrectNumberOfPlayersException, OrderOfPlayersIsChangedException{
-		Game game = new Game();
-		Board board = new Board();
-		game.partecipant(new Player(new PlaceHolder(board)));
-		game.partecipant(new Player(new PlaceHolder(board)));
-		game.partecipant(new Player(new PlaceHolder(board)));
-		game.partecipant(new Player(new PlaceHolder(board)));
-		game.partecipant(new Player(new PlaceHolder(board)));
-		game.partecipant(new Player(new PlaceHolder(board)));
-		game.partecipant(new Player(new PlaceHolder(board)));
-		game.partecipant(new Player(new PlaceHolder(board)));
-		game.partecipant(new Player(new PlaceHolder(board)));
+		ninePartecipants(game, board);
 		game.play(3);
 	}
+
+	
 	
 	@Test
-	public void HorseAndCarPlay100GamesRandomically(){
-		Board board = new Board();
+	public void HorseAndCarPlay100GamesRandomically() throws IncorrectNumberOfPlayersException, OrderOfPlayersIsChangedException{
 		PlaceHolder horsePlaceHolder = new PlaceHolder(board);
 		Player horse = new Player(horsePlaceHolder);
 		PlaceHolder carPlaceHolder = new PlaceHolder(board);
@@ -91,10 +86,7 @@ public class MonopolyR1 {
 
 	
 	@Test
-	public void totalRoundsWas20AndEachPlayerPlayed20rounds() throws IncorrectNumberOfPlayersException, OrderOfPlayersIsChangedException{
-		Game game = new Game();
-		Board board = new Board();
-		Dice dice = new Dice();
+	public void totalRoundsWas20AndEachPlayerPlayed20roundsAndthePartecipantsOrderIsTheSame() throws IncorrectNumberOfPlayersException, OrderOfPlayersIsChangedException{
 		PlaceHolder horsePlaceHolder = new PlaceHolder(board);
 		Player horse = new Player(horsePlaceHolder);
 		horse.dice(dice);
@@ -108,11 +100,26 @@ public class MonopolyR1 {
 		assertEquals(20, car.rounds());
 	}
 	
-	private void initialRandomOrdering(Player firstPlayer, Player secondPlayer) {
+	private void initialRandomOrdering(Player firstPlayer, Player secondPlayer) throws IncorrectNumberOfPlayersException, OrderOfPlayersIsChangedException {
 		Game game = new Game();
+		firstPlayer.dice(dice);
+		secondPlayer.dice(dice);
 		game.partecipant(firstPlayer);
 		game.partecipant(secondPlayer);
+		game.play(20);
 		assertEquals(Arrays.asList(firstPlayer, secondPlayer), game.partecipants());
+	}
+	
+	private void ninePartecipants(Game game, Board board) {
+		game.partecipant(new Player(new PlaceHolder(board)));
+		game.partecipant(new Player(new PlaceHolder(board)));
+		game.partecipant(new Player(new PlaceHolder(board)));
+		game.partecipant(new Player(new PlaceHolder(board)));
+		game.partecipant(new Player(new PlaceHolder(board)));
+		game.partecipant(new Player(new PlaceHolder(board)));
+		game.partecipant(new Player(new PlaceHolder(board)));
+		game.partecipant(new Player(new PlaceHolder(board)));
+		game.partecipant(new Player(new PlaceHolder(board)));
 	}
 
 }
